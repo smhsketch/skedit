@@ -1,6 +1,24 @@
-from tkinter import *
+#!/usr/bin/python3
+import tkinter
 import tkinter.filedialog as fd
 from sys import argv
+import os
+from time import sleep
+
+
+# read .Xresources file from your $HOME directory.
+# this means your colors will restore to default if you run skedit as root.
+# to fix this, copy your .Xresources to /root/
+home = os.environ["HOME"]
+# or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
+try:
+    Xresources = open(home+"/.Xresources")
+    colors = Xresources.read()
+    Xresources.close()
+    print(colors)
+except FileNotFoundError:
+    pass
+
 
 filename = None
 # filetoopen = argv[1]
@@ -8,33 +26,41 @@ filename = None
 def newFile(self):
     global filename
     filename = "scratch document"
-    text.delete(0.0, END)
+    text.delete(0.0, tkinter.END)
+    root.title(filename+" - skedit")
 
 def save(self):
     global filename
-    t = text.get(0.0, END)
+    t = text.get(0.0, tkinter.END)
     f = open(filename, 'w')
     f.write(t)
     f.close()
 
 def saveAs(self):
-    f = fd.asksaveasfile(mode='w', defaultextension='.txt')
-    t = text.get(0.0, END)
+    filename = fd.asksaveasfilename(initialdir="/gui/images", title="save as")
+    f = open(filename, 'w')
+    root.title(filename+" - skedit")
+    t = text.get(0.0, tkinter.END)
     try:
         f.write(t.rstrip())
     except PermissionError:
-        # messagebox.showinfo("Title", "a Tk MessageBox")
-        print("permission denied!!! cringe")
-        
+        # messagebox.showinfo("skedit error", "Permission Denied")   
+        text.delete()
+
 def openFile(self):
-    f = fd.askopenfile(mode='r')
+    global filename
+    filename = fd.askopenfilename(initialdir="/gui/images", title="open file")
+    f = open(filename, 'r')
     t = f.read()
-    text.delete(0.0, END)
+    f.close()
+    root.title(filename+" - skedit")
+    text.delete(0.0, tkinter.END)
     text.insert(0.0, t)
+    
 
 #Tk
-root = Tk()
-root.title("skedit")
+root = tkinter.Tk()
+root.title("scratch document - skedit")
 
 #bindings
 root.bind('<Control-s>', save)
@@ -42,10 +68,14 @@ root.bind('<Control-n>', newFile)
 root.bind('<Control-d>', saveAs)
 root.bind('<Control-o>', openFile)
 
-text = Text(root)
+text = tkinter.Text(root)
 root.update()
 text.configure(background='white', height=root.winfo_height(), width=root.winfo_width())
+root.maxsize(1500, 1000)
+root.update()
+text.focus_set()
 print (root.winfo_geometry())
 
 text.pack()
+root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/icons/icon.png'))
 root.mainloop()
