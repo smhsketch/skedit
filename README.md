@@ -10,3 +10,4 @@ skedit is still in alpha and is not packaged for release yet. you can still down
 * `python3`
 * `tcl`
 * `tk`
+* `python-tk`
