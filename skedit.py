@@ -4,24 +4,25 @@ import tkinter.filedialog as fd
 from sys import argv
 import os
 from time import sleep
+from platform import system
 
-
-# read .Xresources file from your $HOME directory.
+# linux users - this reads .Xresources file from your $HOME directory.
 # this means your colors will restore to default if you run skedit as root.
 # to fix this, copy your .Xresources to /root/
-home = os.environ["HOME"]
-# or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
-try:
-    Xresources = open(home+"/.Xresources")
-    colors = Xresources.read()
-    Xresources.close()
-    print(colors)
-except FileNotFoundError:
-    pass
+# of course, if you use wayland, you can comment this all out.
+if system() == "Linux":
+    home = os.environ["HOME"]
+    # or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
+    try:
+        Xresources = open(home+"/.Xresources")
+        colors = Xresources.read()
+        Xresources.close()
+        print(colors)
+    except FileNotFoundError:
+        pass
 
 
 filename = None
-# filetoopen = argv[1]
 
 def newFile(self):
     global filename
@@ -37,7 +38,7 @@ def save(self):
     f.close()
 
 def saveAs(self):
-    filename = fd.asksaveasfilename(initialdir="/gui/images", title="save as")
+    filename = fd.asksaveasfilename(initialdir="/gui/images", title="save as", defaultextension='.txt')
     f = open(filename, 'w')
     root.title(filename+" - skedit")
     t = text.get(0.0, tkinter.END)
@@ -45,7 +46,7 @@ def saveAs(self):
         f.write(t.rstrip())
     except PermissionError:
         # messagebox.showinfo("skedit error", "Permission Denied")   
-        text.delete()
+        text.delete(0.0, tkinter.END)
 
 def openFile(self):
     global filename
@@ -57,7 +58,6 @@ def openFile(self):
     text.delete(0.0, tkinter.END)
     text.insert(0.0, t)
     
-
 #Tk
 root = tkinter.Tk()
 root.title("scratch document - skedit")
@@ -77,5 +77,6 @@ text.focus_set()
 print (root.winfo_geometry())
 
 text.pack()
-root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/icons/icon.png'))
+if system() == "Linux":
+    root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/icons/icon.png'))
 root.mainloop()
