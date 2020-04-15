@@ -1,3 +1,9 @@
+<center>
+
+![skedit logo](https://i.imgur.com/NlYbBSJ.png)
+
+</center>
+
 # skedit
 A WIP, cross-platform, lightweight text editor built in Tk
 
