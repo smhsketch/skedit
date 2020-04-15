@@ -78,5 +78,7 @@ print (root.winfo_geometry())
 
 text.pack()
 if system() == "Linux":
-    root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/icons/icon.png'))
+    root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/skeditFiles/icon.png'))
+elif system() == "Windows":
+    root.iconphoto(False, tkinter.PhotoImage(file='C:\\Program Files\\skeditFiles\\icon.png'))
 root.mainloop()
