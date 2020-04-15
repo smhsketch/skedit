@@ -9,7 +9,6 @@ from platform import system
 # linux users - this reads .Xresources file from your $HOME directory.
 # this means your colors will restore to default if you run skedit as root.
 # to fix this, copy your .Xresources to /root/
-# of course, if you use wayland, you can comment this all out.
 if system() == "Linux":
     home = os.environ["HOME"]
     # or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
