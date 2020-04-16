@@ -20,6 +20,7 @@ from sys import argv
 import os
 from time import sleep
 from platform import system
+from math import floor
 
 # linux users - this reads .Xresources file from your $HOME directory.
 # this means your colors will restore to default if you run skedit as root.
@@ -34,6 +35,14 @@ if system() == "Linux":
         print(colors)
     except FileNotFoundError:
         pass
+
+
+configFile = open('C:\\Program Files\\skeditFiles\\skeditConf')
+config = configFile.readlines()
+configFile.close()
+defSize = config[config.index("defaultSize:\n") + 1]
+defSize = defSize[:-1]
+print(defSize)
 
 
 filename = None
@@ -71,7 +80,17 @@ def openFile(self):
     root.title(filename+" - skedit")
     text.delete(0.0, tkinter.END)
     text.insert(0.0, t)
-    
+
+def gotoTop(self):
+    text.mark_set("insert", "%d.%d" % (0, 0))
+
+# def gotoBot(self):
+#     text.mark_set("insert", "%d.%d" % (tkinter.END, tkinter.END))
+
+def removeLine(self):
+    curLine = float(floor(float(text.index(tkinter.INSERT))))
+    text.delete(curLine, curLine+1)
+
 #Tk
 root = tkinter.Tk()
 root.title("scratch document - skedit")
@@ -81,10 +100,14 @@ root.bind('<Control-s>', save)
 root.bind('<Control-n>', newFile)
 root.bind('<Control-d>', saveAs)
 root.bind('<Control-o>', openFile)
+root.bind('<Control-t>', gotoTop)
+# root.bind('<Control-b>', gotoBot)
+root.bind('<Control-x>', removeLine)
 
 text = tkinter.Text(root)
 root.update()
 text.configure(background='white', height=root.winfo_height(), width=root.winfo_width())
+root.geometry(defSize)
 root.maxsize(1500, 1000)
 root.update()
 text.focus_set()
@@ -95,4 +118,5 @@ if system() == "Linux":
     root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/skeditFiles/icon.png'))
 elif system() == "Windows":
     root.iconphoto(False, tkinter.PhotoImage(file='C:\\Program Files\\skeditFiles\\icon.png'))
+
 root.mainloop()
