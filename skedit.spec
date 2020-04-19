@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['skedit.py'],
+a = Analysis(['skeditFiles\\skedit.py'],
              pathex=['C:\\Users\\phwar\\Desktop\\Projects\\skedit'],
              binaries=[],
              datas=[],
