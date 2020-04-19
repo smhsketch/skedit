@@ -32,12 +32,14 @@ if system() == "Linux":
         Xresources = open(home+"/.Xresources")
         colors = Xresources.read()
         Xresources.close()
-        print(colors)
     except FileNotFoundError:
         pass
 
 # read config file
-configFile = open('C:\\Program Files\\skeditFiles\\skeditConf')
+if system() == "Windows":
+    configFile = open('C:\\Program Files\\skeditFiles\\skeditConf')
+elif system() == "Linux":
+    configFile = open('/usr/share/skeditFiles/skeditConf')
 config = configFile.readlines()
 configFile.close()
 

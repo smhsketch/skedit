@@ -1,1 +1,1 @@
-nohup /usr/share/skeditFiles/skedit.py &
+nohup /usr/share/skeditFiles/skedit.py > /dev/null 2>&1 &

@@ -30,5 +30,3 @@ ensure you have all of skedit's dependencies installed before continuing.
 * copy the `skeditFiles` folder to `/usr/share/`
 * copy the `skedit` (NOT `skedit.py`) script to `/usr/bin/` and `sudo chmod +x` the script to ensure it can run
 * run the `skedit` command with your program launcher or terminal.
-
-
