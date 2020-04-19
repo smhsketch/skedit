@@ -28,8 +28,7 @@ ensure you have all of skedit's dependencies installed before continuing.
 
 * clone the repository to your computer. `git clone github.com/smhsketch/skedit`
 * copy the `skeditFiles` folder to `/usr/share/`
-* rename the `skedit.py` shell script to `skedit` or whatever you want
-* copy the script to `/usr/bin/` and `sudo chmod +x` the script to ensure it can run
-* run the `skedit` command with your program launcher of choice.
+* copy the `skedit` (NOT `skedit.py`) script to `/usr/bin/` and `sudo chmod +x` the script to ensure it can run
+* run the `skedit` command with your program launcher or terminal.
 
 

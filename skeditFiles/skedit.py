@@ -36,10 +36,12 @@ if system() == "Linux":
     except FileNotFoundError:
         pass
 
-
+# read config file
 configFile = open('C:\\Program Files\\skeditFiles\\skeditConf')
 config = configFile.readlines()
 configFile.close()
+
+# get size from config file
 defSize = config[config.index("defaultSize:\n") + 1]
 defSize = defSize[:-1]
 print(defSize)
