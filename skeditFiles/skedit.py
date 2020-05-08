@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 # Copyright 2020 Patrick Warren
 
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +18,8 @@ from sys import argv, exit
 import os
 from platform import system
 from math import floor
+colorWheel = []
+colorWheel2 = []
 
 # Logging functions
 def log(n):
@@ -30,28 +30,16 @@ def die(n):
     print("[XX]", n)
     exit(1)
 
-# linux users - this reads .Xresources file from your $HOME directory.
-# this means your colors will restore to default if you run skedit as root.
-# to fix this, copy your .Xresources to /root/
-if system() == "Linux":
-    home = os.environ["HOME"]
-    # or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
-    try:
-        Xresources = open(home+"/.Xresources")
-        colors = Xresources.read()
-        Xresources.close()
-    except FileNotFoundError:
-        pass
 
 # read config file
 if system() == "Windows":
-    configPath = "C:\\Program Files\\skeditFiles\\skeditConf"
+    configPath = "C:\\Program Files\\skeditFiles\\skeditConf.txt"
 else: # Assuming other operating systems are UNIX-like
-    configPath = "/usr/share/skeditFiles/skeditConf"
+    configPath = "/usr/share/skeditFiles/skeditConf.txt"
 
 # Checks if the file exists
 try:
-    configPath = open(configPath)
+    configFile = open(configPath)
 except FileNotFoundError:
     die("skedit configuration missing.")
 
@@ -61,7 +49,40 @@ configFile.close()
 # get size from config file
 defSize = config[config.index("defaultSize:\n") + 1]
 defSize = defSize[:-1]
-print(defSize)
+
+# get resources preference from config file
+ignoreRes = config[config.index("ignoreResources:\n") + 1]
+
+if ignoreRes != "true":
+    # windows users -  this reads the skedit resources file.
+    # the formatting for this file mimics the formatting of a linux .Xresources file.
+    if system() == "Windows":
+        try:
+            Xresources = open("C:\\Program Files\\skeditFiles\\skeditResources.txt")
+            colors = Xresources.readlines()
+            Xresources.close()
+        except FileNotFoundError:
+            pass
+    # linux users - this reads .Xresources file from your $HOME directory.
+    # this means your colors will restore to default if you run skedit as root.
+    # to fix this, copy your .Xresources to /root/
+    else:
+        home = os.environ["HOME"]
+        # or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
+        try:
+            Xresources = open(home+"/.Xresources")
+            colors = Xresources.read()
+            Xresources.close()
+        except FileNotFoundError:
+            pass
+    # takes colors from Xresources file
+
+    for i in range(16):
+        colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
+        # this is the worst line of code in the history of humanity.
+        colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))    
+else:
+    print("ignoring resources file")
 
 filename = None
 
@@ -78,7 +99,6 @@ def newFile(self):
     root.title(filename+" - skedit")
 
 def save(self):
-    # NOTE : No need to set a variable as global when it comes to only read it.
     t = get_text()
     with open(filename, 'w') as f:
         f.write(t)
@@ -116,9 +136,6 @@ def openFile(self):
 def gotoTop(self):
     text.mark_set("insert", "%d.%d" % (0, 0))
 
-# def gotoBot(self):
-#     text.mark_set("insert", "%d.%d" % (tkinter.END, tkinter.END))
-
 def removeLine(self):
     curLine = float(floor(float(text.index(tkinter.INSERT))))
     text.delete(curLine, curLine+1)
@@ -133,7 +150,6 @@ root.bind('<Control-n>', newFile)
 root.bind('<Control-d>', saveAs)
 root.bind('<Control-o>', openFile)
 root.bind('<Control-t>', gotoTop)
-# root.bind('<Control-b>', gotoBot)
 root.bind('<Control-x>', removeLine)
 
 text = tkinter.Text(root)
@@ -143,7 +159,6 @@ root.geometry(defSize)
 root.maxsize(1500, 1000)
 root.update()
 text.focus_set()
-print (root.winfo_geometry())
 
 text.pack()
 try:
