@@ -42,7 +42,7 @@ if system() == "Linux":
         Xresources.close()
     except FileNotFoundError:
         pass
-"""
+
 # read config file
 if system() == "Windows":
     configPath = "C:\\Program Files\\skeditFiles\\skeditConf"
@@ -62,8 +62,6 @@ configFile.close()
 defSize = config[config.index("defaultSize:\n") + 1]
 defSize = defSize[:-1]
 print(defSize)
-"""
-defSize = "500x500"
 
 filename = None
 
