@@ -50,6 +50,8 @@ configFile.close()
 defSize = config[config.index("defaultSize:\n") + 1]
 defSize = defSize[:-1]
 
+useDefSize = config[config.index("applyDefaultSizeAtStartup:\n") + 1]
+
 # get resources preference from config file
 ignoreRes = config[config.index("ignoreResources:\n") + 1]
 
@@ -155,7 +157,8 @@ root.bind('<Control-x>', removeLine)
 text = tkinter.Text(root)
 root.update()
 text.configure(background='white', height=root.winfo_height(), width=root.winfo_width())
-root.geometry(defSize)
+if useDefSize == "true\n":
+    root.geometry(defSize)
 root.maxsize(1500, 1000)
 root.update()
 text.focus_set()
