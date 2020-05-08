@@ -16,11 +16,19 @@
 
 import tkinter
 import tkinter.filedialog as fd
-from sys import argv
+from sys import argv, exit
 import os
-from time import sleep
 from platform import system
 from math import floor
+
+# Logging functions
+def log(n):
+    print("[#]", n)
+def warn(n):
+    print("[!]", n)
+def die(n):
+    print("[XX]", n)
+    exit(1)
 
 # linux users - this reads .Xresources file from your $HOME directory.
 # this means your colors will restore to default if you run skedit as root.
@@ -37,9 +45,16 @@ if system() == "Linux":
 
 # read config file
 if system() == "Windows":
-    configFile = open('C:\\Program Files\\skeditFiles\\skeditConf')
-elif system() == "Linux":
-    configFile = open('/usr/share/skeditFiles/skeditConf')
+    configPath = "C:\\Program Files\\skeditFiles\\skeditConf"
+else: # Assuming other operating systems are UNIX-like
+    configPath = "/usr/share/skeditFiles/skeditConf"
+
+# Checks if the file exists
+try:
+    configPath = open(configPath)
+except FileNotFoundError:
+    die("skedit configuration missing.")
+
 config = configFile.readlines()
 configFile.close()
 
@@ -48,8 +63,13 @@ defSize = config[config.index("defaultSize:\n") + 1]
 defSize = defSize[:-1]
 print(defSize)
 
-
 filename = None
+
+def get_text():
+    t = text.get(0.0, tkinter.END).rstrip()
+    if t[:-1] != '\n':
+        t += '\n'
+    return t
 
 def newFile(self):
     global filename
@@ -58,29 +78,37 @@ def newFile(self):
     root.title(filename+" - skedit")
 
 def save(self):
-    global filename
-    t = text.get(0.0, tkinter.END)
-    f = open(filename, 'w')
-    f.write(t)
-    f.close()
+    # NOTE : No need to set a variable as global when it comes to only read it.
+    t = get_text()
+    with open(filename, 'w') as f:
+        f.write(t)
 
 def saveAs(self):
-    filename = fd.asksaveasfilename(initialdir="/gui/images", title="save as", defaultextension='.txt')
-    f = open(filename, 'w')
-    root.title(filename+" - skedit")
-    t = text.get(0.0, tkinter.END)
-    try:
-        f.write(t.rstrip())
-    except PermissionError:
-        # messagebox.showinfo("skedit error", "Permission Denied")   
-        text.delete(0.0, tkinter.END)
+    global filename
+    fn = fd.asksaveasfilename(initialdir="/gui/images", title="save as", defaultextension='.txt')
+    with open(fn, 'w') as f:
+        root.title(fn+" - skedit")
+        t = get_text()
+        try:
+            f.write(t)
+        except PermissionError:
+            # messagebox.showinfo("skedit error", "Permission Denied")   
+            text.delete(0.0, tkinter.END)
+        except:
+            pass
+        else:
+            filename = fn
 
 def openFile(self):
     global filename
-    filename = fd.askopenfilename(initialdir="/gui/images", title="open file")
-    f = open(filename, 'r')
-    t = f.read()
-    f.close()
+    fn = fd.askopenfilename(initialdir="/gui/images", title="open file")
+    
+    try:
+        t = open(fn, 'r').read()
+    except:
+        return
+    else:
+        filename = fn
     root.title(filename+" - skedit")
     text.delete(0.0, tkinter.END)
     text.insert(0.0, t)
@@ -118,9 +146,12 @@ text.focus_set()
 print (root.winfo_geometry())
 
 text.pack()
-if system() == "Linux":
-    root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/skeditFiles/icon.png'))
-elif system() == "Windows":
-    root.iconphoto(False, tkinter.PhotoImage(file='C:\\Program Files\\skeditFiles\\icon.png'))
+try:
+    if system() == "Windows":
+        root.iconphoto(False, tkinter.PhotoImage(file='C:\\Program Files\\skeditFiles\\icon.png'))
+    else:
+        root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/skeditFiles/icon.png'))
+except:
+    pass
 
 root.mainloop()
