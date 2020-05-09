@@ -57,7 +57,7 @@ ignoreRes = config[config.index("ignoreResources:\n") + 1]
 
 if ignoreRes != "true":
     # windows users -  this reads the skedit resources file.
-    # the formatting for this file mimics the formatting of a linux .Xresources file.
+    # the formatting for this file mimics the formatting of a *nix .Xresources file.
     if system() == "Windows":
         try:
             Xresources = open("C:\\Program Files\\skeditFiles\\skeditResources.txt")

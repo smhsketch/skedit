@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/usr/share/skeditFiles/skedit-linux.py", line 54, in <module>
+    useDefSize = config[config.index("applyDefaultSizeAtStartup:\n") + 1]
+ValueError: 'applyDefaultSizeAtStartup:\n' is not in list
+Traceback (most recent call last):
+  File "/usr/share/skeditFiles/skedit-linux.py", line 54, in <module>
+    useDefSize = config[config.index("applyDefaultSizeAtStartup:\n") + 1]
+ValueError: 'applyDefaultSizeAtStartup:\n' is not in list
