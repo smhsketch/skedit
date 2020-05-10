@@ -132,7 +132,7 @@ def saveAs(self):
 
 def openFile(self):
     global filename
-    fn = fd.askopenfilename(initialdir="/gui/images", title="open file")
+    fn = fd.askopenfilename(title="open file")
     
     try:
         t = open(fn, 'r').read()

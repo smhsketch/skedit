@@ -82,19 +82,28 @@ if ignoreRes != "true":
             Xresources = open(home+"/.Xresources")
             colors = Xresources.read()
             Xresources.close()
-            for i in range(16):
-                colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
-                # this is the worst line of code in the history of humanity.
-                colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))  
-        
         except FileNotFoundError:
             pass
-    # takes colors from Xresources file
-   
+    try:
+        for i in range(16):
+                colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
+                # the worst line of code ever written
+                colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))
+        foreground = str([a for a in colors if ("*.foreground:") in a]).replace(" ", "")
+        foreground = foreground.replace("['*.foreground:", "").replace("\\n']", "")
+        background = str([a for a in colors if ("*.background:") in a]).replace(" ", "")
+        background = background.replace("['*.background:", "").replace("\\n']", "")
+        cursor = str([a for a in colors if ("*.cursorColor:") in a])
+        cursor = cursor.replace("['*.cursorColor:", "").replace("\\n']", "").replace(" ", "")
+    except:
+        pass
+
 else:
     print("ignoring resources file")
 
 filename = None
+
+# main functions for using editor
 
 def get_text():
     t = text.get(0.0, tkinter.END).rstrip()
@@ -131,7 +140,7 @@ def saveAs(self):
 
 def openFile(self):
     global filename
-    fn = fd.askopenfilename(initialdir="/gui/images", title="open file")
+    fn = fd.askopenfilename(title="open file")
     
     try:
         t = open(fn, 'r').read()
@@ -164,7 +173,7 @@ root.bind('<Control-x>', removeLine)
 
 text = tkinter.Text(root)
 root.update()
-text.configure(background='white', height=root.winfo_height(), width=root.winfo_width())
+text.configure(background=background, fg='white', height=root.winfo_height(), width=root.winfo_width())
 if useDefSize == "true\n":
     root.geometry(defSize)
 root.maxsize(1500, 1000)
