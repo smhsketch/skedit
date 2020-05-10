@@ -1,4 +1,4 @@
-# Copyright 2020 Patrick Warren
+#    Copyright 2020 Patrick Warren
 
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -47,14 +47,21 @@ config = configFile.readlines()
 configFile.close()
 
 # get size from config file
-defSize = config[config.index("defaultSize:\n") + 1]
-defSize = defSize[:-1]
+try:
+    defSize = config[config.index("defaultSize:\n") + 1]
+    defSize = defSize[:-1]
+except:
+    defSize = "500x500"
+try:
+    useDefSize = config[config.index("applyDefaultSizeAtStartup:\n") + 1]
+except:
+    useDefSize = "true"
 
-useDefSize = config[config.index("applyDefaultSizeAtStartup:\n") + 1]
-
-# get resources preference from config file
-ignoreRes = config[config.index("ignoreResources:\n") + 1]
-
+try:
+    # get resources preference from config file
+    ignoreRes = config[config.index("ignoreResources:\n") + 1]
+except:
+    ignoreRes = "false"
 if ignoreRes != "true":
     # windows users -  this reads the skedit resources file.
     # the formatting for this file mimics the formatting of a *nix .Xresources file.
@@ -75,14 +82,15 @@ if ignoreRes != "true":
             Xresources = open(home+"/.Xresources")
             colors = Xresources.read()
             Xresources.close()
+            for i in range(16):
+                colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
+                # this is the worst line of code in the history of humanity.
+                colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))  
+        
         except FileNotFoundError:
             pass
     # takes colors from Xresources file
-
-    for i in range(16):
-        colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
-        # this is the worst line of code in the history of humanity.
-        colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))    
+   
 else:
     print("ignoring resources file")
 
@@ -107,7 +115,7 @@ def save(self):
 
 def saveAs(self):
     global filename
-    fn = fd.asksaveasfilename(initialdir="/gui/images", title="save as", defaultextension='.txt')
+    fn = fd.asksaveasfilename(initialdir="~", title="save as", defaultextension='.txt')
     with open(fn, 'w') as f:
         root.title(fn+" - skedit")
         t = get_text()

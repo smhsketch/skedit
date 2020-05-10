@@ -83,14 +83,15 @@ if ignoreRes != "true":
             Xresources = open(home+"/.Xresources")
             colors = Xresources.read()
             Xresources.close()
+            for i in range(16):
+                colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
+                # this is the worst line of code in the history of humanity.
+                colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))  
+        
         except FileNotFoundError:
             pass
     # takes colors from Xresources file
-
-    for i in range(16):
-        colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
-        # this is the worst line of code in the history of humanity.
-        colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))    
+   
 else:
     print("ignoring resources file")
 
@@ -115,7 +116,7 @@ def save(self):
 
 def saveAs(self):
     global filename
-    fn = fd.asksaveasfilename(initialdir="/gui/images", title="save as", defaultextension='.txt')
+    fn = fd.asksaveasfilename(initialdir="~", title="save as", defaultextension='.txt')
     with open(fn, 'w') as f:
         root.title(fn+" - skedit")
         t = get_text()
