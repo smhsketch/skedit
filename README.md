@@ -18,3 +18,17 @@ however, there are no dependencies to run a `.exe` or compiled *nix script of sk
 # installation
 
 download `skedit` (*nix) or `skedit.exe` (Windows) from the [releases](https://github.com/smhsketch/skedit/releases) tab. Source code is also available.
+
+# bindings
+
+`<control-n>` new buffer
+
+`<control-s>` save
+
+`<control-d>` save as
+
+`<control-o>` open file
+
+`<control-t>` go to top of buffer
+
+`<control-x>` remove current line
