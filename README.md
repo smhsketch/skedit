@@ -6,27 +6,15 @@ A WIP, cross-platform, lightweight text editor built in Tk
 
 # dependencies
 
+if you want to run a raw, uncompiled instance of skedit, it depends on
+
 * `python3`
 * `tcl`
 * `tk`
 * `python-tk`
 
+however, there are no dependencies to run a `.exe` or compiled *nix script of skedit.
+
 # installation
 
-since skedit is in a very early state, there is no installer/package you can run.
-however, it is very easy to build skedit manually.
-
-ensure you have all of skedit's dependencies installed before continuing.
-
-## windows
-
-* clone the repository to your computer. `git clone github.com/smhsketch/skedit`
-* copy the `skeditFiles` folder to `C:/Program Files/`
-* run `dist/skedit.exe`
-
-## mac / linux
-
-* clone the repository to your computer. `git clone github.com/smhsketch/skedit`
-* copy the `skeditFiles` folder to `/usr/share/`
-* copy the `skedit` (NOT `skedit.py`) script to `/usr/bin/` and `sudo chmod +x` the script to ensure it can run
-* run the `skedit` command with your program launcher or terminal.
+download `skedit` (*nix) or `skedit.exe` (Windows) from the [releases](https://github.com/smhsketch/skedit/releases) tab. Source code is also available.
