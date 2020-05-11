@@ -22,7 +22,7 @@ download `skedit-nix` (on *nix) or `skedit-windows` (on Windows) from the [relea
 
 extract the .zip to wherever you want. make sure to keep the executable in the original folder it was in.
 
-move the `skeditFiles` folder to `C:\Program Files` (Windows) or `/usr/share` (*nix).
+move the `skeditFiles` folder to `C:\Program Files\skedit` (Windows) or `/usr/share` (*nix).
 
 execute the executable.
 
