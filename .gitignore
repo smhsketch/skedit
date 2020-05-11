@@ -3,3 +3,4 @@ exe/
 fd
 os
 tkinter
+build/exe*/lib/

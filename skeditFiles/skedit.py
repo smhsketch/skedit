@@ -33,7 +33,7 @@ def die(n):
 
 # read config file
 if system() == "Windows":
-    configPath = "C:\\Program Files (x86)\\skedit\\skeditFiles\\skeditConf.txt"
+    configPath = "C:\\Program Files\\skedit\\skeditFiles\\skeditConf.txt"
 else: # Assuming other operating systems are UNIX-like
     configPath = "/usr/share/skeditFiles/skeditConf.txt"
 
@@ -67,7 +67,7 @@ if ignoreRes != "true":
     # the formatting for this file mimics the formatting of a *nix .Xresources file.
     if system() == "Windows":
         try:
-            Xresources = open("C:\\Program Files (x86)\\skedit\\skeditFiles\\skeditResources.txt")
+            Xresources = open("C:\\Program Files\\skedit\\skeditFiles\\skeditResources.txt")
             colors = Xresources.readlines()
             Xresources.close()
         except FileNotFoundError:
@@ -175,7 +175,7 @@ root.bind('<Control-x>', removeLine)
 
 text = tkinter.Text(root)
 root.update()
-text.configure(background=background, fg='white', height=root.winfo_height(), width=root.winfo_width())
+text.configure(background=background, fg=foreground, height=root.winfo_height(), width=root.winfo_width())
 if useDefSize == "true\n":
     root.geometry(defSize)
 root.maxsize(1500, 1000)
@@ -185,7 +185,7 @@ text.focus_set()
 text.pack()
 try:
     if system() == "Windows":
-        root.iconphoto(False, tkinter.PhotoImage(file='C:\\Program Files (x86)\\skedit\\skeditFiles\\icon.png'))
+        root.iconphoto(False, tkinter.PhotoImage(file='C:\\Program Files\\skedit\\skeditFiles\\icon.png'))
     else:
         root.iconphoto(False, tkinter.PhotoImage(file='/usr/share/skeditFiles/icon.png'))
 except:
