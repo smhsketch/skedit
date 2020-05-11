@@ -103,7 +103,7 @@ if ignoreRes != "true":
 else:
     print("ignoring resources file")
 
-filename = None
+filename = "scratch document"
 
 # main functions for using editor
 
