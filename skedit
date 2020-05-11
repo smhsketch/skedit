@@ -1,1 +1,1 @@
-/usr/share/skeditFiles/skedit-linux.py > /dev/null 2>&1 & disown
+python3 /usr/share/skeditFiles/skedit.py > /dev/null 2>&1 & disown

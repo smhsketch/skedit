@@ -80,13 +80,13 @@ if ignoreRes != "true":
         # or, change 'home+"/.Xresources"' to '"yourusername/.Xresources"' in the follwing line
         try:
             Xresources = open(home+"/.Xresources")
-            colors = Xresources.read()
+            colors = Xresources.readlines()
             Xresources.close()
         except FileNotFoundError:
             pass
     try:
         for i in range(16):
-                colorWheel.append(([a for a in colors if ("*.color" + str(i) + ":") in a]))
+                colorWheel.append([x for x in colors if ("*.color" + str(i) + ":") in x])
                 # the worst line of code ever written
                 colorWheel2.append((str(colorWheel[i]).replace("*.color" + str(i) + ":", "")).replace(" ", "").replace("\\n", "").replace("['", "").replace("']", ""))
         foreground = str([a for a in colors if ("*.foreground:") in a]).replace(" ", "")
@@ -96,8 +96,10 @@ if ignoreRes != "true":
         cursor = str([a for a in colors if ("*.cursorColor:") in a])
         cursor = cursor.replace("['*.cursorColor:", "").replace("\\n']", "").replace(" ", "")
     except:
+        background = 'white'
+        foreground='black'
+        cursor='black'
         pass
-
 else:
     print("ignoring resources file")
 
