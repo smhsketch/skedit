@@ -1,0 +1,4 @@
+defaultSize:
+600x600
+applyDefaultSizeAtStartup:
+false

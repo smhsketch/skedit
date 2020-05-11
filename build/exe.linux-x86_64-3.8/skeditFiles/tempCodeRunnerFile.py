@@ -1,0 +1,2 @@
+
+    print("ignoring resources file")

@@ -13,11 +13,18 @@ if you want to run a raw, uncompiled instance of skedit, it depends on
 * `tk`
 * `python-tk`
 
-however, there are no dependencies to run a `.exe` or compiled *nix script of skedit.
+however, there are no dependencies to run a `.exe` of skedit or a compiled *nix script.
+if you move the executable out of the build folder it comes in, it will not work.
 
 # installation
 
-download `skedit` (*nix) or `skedit.exe` (Windows) from the [releases](https://github.com/smhsketch/skedit/releases) tab. Source code is also available.
+download `skedit-nix` (on *nix) or `skedit-windows` (on Windows) from the [releases](https://github.com/smhsketch/skedit/releases) tab.
+
+extract the .zip to wherever you want. make sure to keep the executable in the original folder it was in.
+
+move the `skeditFiles` folder to `C:\Program Files` (Windows) or `/usr/share` (*nix).
+
+execute the executable.
 
 # bindings
 
