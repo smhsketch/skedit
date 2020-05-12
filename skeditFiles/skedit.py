@@ -18,6 +18,8 @@ from sys import argv, exit
 import os
 from platform import system
 from math import floor
+from time import sleep
+
 colorWheel = []
 colorWheel2 = []
 
@@ -28,16 +30,17 @@ def warn(n):
     print("[!]", n)
 def die(n):
     print("[XX]", n)
+    sleep(5)
     exit(1)
 
 
-# read config file
+# define config file path
 if system() == "Windows":
     configPath = "C:\\Program Files\\skedit\\skeditFiles\\skeditConf.txt"
 else: # Assuming other operating systems are UNIX-like
     configPath = "/usr/share/skeditFiles/skeditConf.txt"
 
-# Checks if the file exists
+# Checks if the config file exists
 try:
     configFile = open(configPath)
 except FileNotFoundError:
@@ -46,7 +49,11 @@ except FileNotFoundError:
 config = configFile.readlines()
 configFile.close()
 
-# get size from config file
+# get info from config file
+try:
+    fontSize = config[config.index("fontSize:\n") + 1] 
+except:
+    fontSize = 15
 try:
     defSize = config[config.index("defaultSize:\n") + 1]
     defSize = defSize[:-1]
@@ -56,7 +63,6 @@ try:
     useDefSize = config[config.index("applyDefaultSizeAtStartup:\n") + 1]
 except:
     useDefSize = "true"
-
 try:
     # get resources preference from config file
     ignoreRes = config[config.index("ignoreResources:\n") + 1]
@@ -96,9 +102,9 @@ if ignoreRes != "true":
         cursor = str([a for a in colors if ("*.cursorColor:") in a])
         cursor = cursor.replace("['*.cursorColor:", "").replace("\\n']", "").replace(" ", "")
     except:
-        background = 'white'
-        foreground='black'
-        cursor='black'
+        background = '#1c1c1c'
+        foreground='#d6d6d6'
+        cursor='#d6d6d6'
         pass
 else:
     print("ignoring resources file")
@@ -109,8 +115,6 @@ filename = "scratch document"
 
 def get_text():
     t = text.get(0.0, tkinter.END).rstrip()
-    if t[:-1] != '\n':
-        t += '\n'
     return t
 
 def newFile(self):
@@ -120,6 +124,7 @@ def newFile(self):
     root.title(filename+" - skedit")
 
 def save(self):
+    global t
     t = get_text()
     with open(filename, 'w') as f:
         f.write(t)
@@ -132,11 +137,8 @@ def saveAs(self):
         t = get_text()
         try:
             f.write(t)
-        except PermissionError:
-            # messagebox.showinfo("skedit error", "Permission Denied")   
-            text.delete(0.0, tkinter.END)
         except:
-            pass
+            warn("unable to save file.")
         else:
             filename = fn
 
@@ -161,6 +163,33 @@ def removeLine(self):
     curLine = float(floor(float(text.index(tkinter.INSERT))))
     text.delete(curLine, curLine+1)
 
+def helpMenu(self):
+    global t
+    if root.title() != "scratch document":
+        save(None)
+    t = get_text()
+    root.title("help - skedit")
+    text.delete(0.0, tkinter.END)
+    helpText =  """Welcome to skedit, the cross-platform, dark-mode by default, simple text editor.
+
+skedit is built with python, and tkinter. source code is available at https://github.com/smhsketch/skedit.
+
+bindings:
+    ctrl-o: open a new file
+    ctrl-s: save current file
+    ctrl-d: save current buffer as
+    ctrl-n: new blank buffer
+    ctrl-t: go to top of buffer
+    ctrl-r: remove current line of buffer
+    ctrl-e: exit this help menu and return to your document"""
+    text.insert(0.0, helpText)
+
+def exitHelp(self):
+    if root.title() == "help - skedit":
+        text.delete(0.0, tkinter.END)
+        text.insert(0.0, t)
+        root.title(filename+" - skedit")
+
 #Tk
 root = tkinter.Tk()
 root.title("scratch document - skedit")
@@ -171,11 +200,13 @@ root.bind('<Control-n>', newFile)
 root.bind('<Control-d>', saveAs)
 root.bind('<Control-o>', openFile)
 root.bind('<Control-t>', gotoTop)
-root.bind('<Control-x>', removeLine)
+root.bind('<Control-r>', removeLine)
+root.bind('<Control-h>', helpMenu)
+root.bind('<Control-e>', exitHelp)
 
 text = tkinter.Text(root)
 root.update()
-text.configure(background=background, fg=foreground, height=root.winfo_height(), width=root.winfo_width())
+text.configure(background=background, fg=foreground, insertbackground=cursor, height=root.winfo_height(), width=root.winfo_width(), bd=0, font=("monospace", fontSize))
 if useDefSize == "true\n":
     root.geometry(defSize)
 root.maxsize(1500, 1000)
