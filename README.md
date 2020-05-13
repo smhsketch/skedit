@@ -28,6 +28,10 @@ execute the executable.
 
 # bindings
 
+`<control-h>` help menu
+
+`<control-e>` exit help menu
+
 `<control-n>` new buffer
 
 `<control-s>` save
